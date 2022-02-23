@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
+import './App.css';
 
 class App extends React.Component {
   constructor() {
@@ -100,6 +101,7 @@ class App extends React.Component {
 
   render() {
     const {
+      cards,
       isSaveButtonDisabled,
     } = this.state;
 
@@ -114,6 +116,11 @@ class App extends React.Component {
         <Card
           { ...this.state }
         />
+
+        {cards.map((element, index) => (<Card
+          key={ index }
+          { ...element }
+        />))}
       </div>
     );
   }
