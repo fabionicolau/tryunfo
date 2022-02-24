@@ -16,22 +16,31 @@ class App extends React.Component {
       cardRare: 'normal',
       cardTrunfo: false,
       isSaveButtonDisabled: true,
+      hasTrunfo: false,
+      isCard: false,
       cards: [],
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     this.ValidateForm = this.ValidateForm.bind(this);
+    this.clearCard = this.clearCard.bind(this);
   }
 
   onInputChange({ target }) {
     const { name, value, checked } = target;
+    if (checked) {
+      this.setState({
+        hasTrunfo: true,
+      });
+    }
+
     const valor = target.type === 'checkbox' ? checked : value;
     this.setState({
       [name]: valor,
     }, () => this.ValidateForm());
   }
 
-  onSaveButtonClick(event) {
+  onSaveButtonClick() {
     const {
       cardName,
       cardDescription,
@@ -51,12 +60,11 @@ class App extends React.Component {
       cardImage,
       cardRare,
       cardTrunfo,
+      isCard: true,
     };
-    event.preventDefault();
+
     this.setState((previous) => ({
       cards: [...previous.cards, newCard],
-    }));
-    this.setState(() => ({
       cardName: '',
       cardDescription: '',
       cardAttr1: '0',
@@ -65,6 +73,7 @@ class App extends React.Component {
       cardImage: '',
       cardRare: 'normal',
       cardTrunfo: false,
+      isCard: false,
       isSaveButtonDisabled: true,
     }));
   }
@@ -99,10 +108,28 @@ class App extends React.Component {
     }
   }
 
+  clearCard(removeItem) {
+    const { cards } = this.state;
+    const temp = cards.filter((element) => element.cardName !== removeItem);
+    this.setState({
+      cards: temp,
+    });
+
+    const cardsIncludesTrunfo = temp.some((element) => (element.cardTrunfo));
+    if (cardsIncludesTrunfo) {
+      this.setState({
+        hasTrunfo: true,
+      });
+    } else {
+      this.setState({
+        hasTrunfo: false,
+      });
+    }
+  }
+
   render() {
     const {
       cards,
-      isSaveButtonDisabled,
     } = this.state;
 
     return (
@@ -111,7 +138,6 @@ class App extends React.Component {
           { ...this.state }
           onInputChange={ this.onInputChange }
           onSaveButtonClick={ this.onSaveButtonClick }
-          isSaveButtonDisabled={ isSaveButtonDisabled }
         />
         <Card
           { ...this.state }
@@ -119,6 +145,7 @@ class App extends React.Component {
 
         {cards.map((element, index) => (<Card
           key={ index }
+          clearCard={ this.clearCard }
           { ...element }
         />))}
       </div>
