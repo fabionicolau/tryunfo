@@ -1,8 +1,8 @@
 import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
-import './App.css';
 import Filter from './components/Filter';
+import './App.css';
 
 class App extends React.Component {
   constructor() {
@@ -20,18 +20,22 @@ class App extends React.Component {
       hasTrunfo: false,
       isCard: false,
       nameFilter: '',
-      rareFilter: 'todas',
+      rareFilter: '',
+      trunfoFilter: false,
       cards: [],
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     this.ValidateForm = this.ValidateForm.bind(this);
     this.clearCard = this.clearCard.bind(this);
+    this.filterTrunfo = this.filterTrunfo.bind(this);
+    this.filterRare = this.filterRare.bind(this);
   }
 
   onInputChange({ target }) {
     const { name, value, checked } = target;
-    if (checked) {
+
+    if (target.name === 'cardTrunfo') {
       this.setState({
         hasTrunfo: true,
       });
@@ -130,10 +134,38 @@ class App extends React.Component {
     }
   }
 
+  filterTrunfo() {
+    const { cards } = this.state;
+    return cards
+      .filter((element) => element.cardTrunfo)
+      .map((element, index) => (<Card
+        key={ index }
+        clearCard={ this.clearCard }
+        { ...element }
+      />));
+  }
+
+  filterRare() {
+    const { rareFilter, nameFilter, cards } = this.state;
+    let rare = [];
+    if (rareFilter === '') {
+      rare = cards;
+    } else {
+      rare = cards.filter((element) => element.cardRare === rareFilter);
+    }
+
+    return rare
+      .filter((element) => element.cardName.includes(nameFilter))
+      .map((elements, index) => (<Card
+        key={ index }
+        clearCard={ this.clearCard }
+        { ...elements }
+      />));
+  }
+
   render() {
     const {
-      cards,
-      nameFilter,
+      trunfoFilter,
     } = this.state;
 
     return (
@@ -150,16 +182,11 @@ class App extends React.Component {
         <Filter
           { ...this.state }
           onInputChange={ this.onInputChange }
-          handleFilter={ this.handleFilter }
         />
 
-        {cards
-          .filter((element) => element.cardName.includes(nameFilter))
-          .map((element, index) => (<Card
-            key={ index }
-            clearCard={ this.clearCard }
-            { ...element }
-          />))}
+        { trunfoFilter
+          ? this.filterTrunfo()
+          : this.filterRare() }
       </div>
     );
   }
