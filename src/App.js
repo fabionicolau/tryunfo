@@ -2,6 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
 import './App.css';
+import Filter from './components/Filter';
 
 class App extends React.Component {
   constructor() {
@@ -18,6 +19,8 @@ class App extends React.Component {
       isSaveButtonDisabled: true,
       hasTrunfo: false,
       isCard: false,
+      nameFilter: '',
+      rareFilter: 'todas',
       cards: [],
     };
     this.onInputChange = this.onInputChange.bind(this);
@@ -130,6 +133,7 @@ class App extends React.Component {
   render() {
     const {
       cards,
+      nameFilter,
     } = this.state;
 
     return (
@@ -143,11 +147,19 @@ class App extends React.Component {
           { ...this.state }
         />
 
-        {cards.map((element, index) => (<Card
-          key={ index }
-          clearCard={ this.clearCard }
-          { ...element }
-        />))}
+        <Filter
+          { ...this.state }
+          onInputChange={ this.onInputChange }
+          handleFilter={ this.handleFilter }
+        />
+
+        {cards
+          .filter((element) => element.cardName.includes(nameFilter))
+          .map((element, index) => (<Card
+            key={ index }
+            clearCard={ this.clearCard }
+            { ...element }
+          />))}
       </div>
     );
   }
