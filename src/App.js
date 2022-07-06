@@ -169,25 +169,30 @@ class App extends React.Component {
     } = this.state;
 
     return (
-      <div>
-        <Form
-          { ...this.state }
-          onInputChange={ this.onInputChange }
-          onSaveButtonClick={ this.onSaveButtonClick }
-        />
-        <Card
-          { ...this.state }
-        />
+      <main className="main-container">
+        <section className="formsPreview-container">
+          <Form
+            { ...this.state }
+            onInputChange={ this.onInputChange }
+            onSaveButtonClick={ this.onSaveButtonClick }
+          />
+          <Card
+            { ...this.state }
+          />
+        </section>
+        <section>
+          <div>
+            <Filter
+              { ...this.state }
+              onInputChange={ this.onInputChange }
+            />
 
-        <Filter
-          { ...this.state }
-          onInputChange={ this.onInputChange }
-        />
-
-        { trunfoFilter
-          ? this.filterTrunfo()
-          : this.filterRare() }
-      </div>
+            {trunfoFilter
+              ? this.filterTrunfo()
+              : this.filterRare()}
+          </div>
+        </section>
+      </main>
     );
   }
 }

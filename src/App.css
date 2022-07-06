@@ -1,3 +1,19 @@
+.formsPreview-container {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .img {
   height: 200px;
   width: 200px;

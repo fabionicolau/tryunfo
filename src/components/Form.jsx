@@ -19,7 +19,7 @@ class Form extends React.Component {
     } = this.props;
 
     return (
-      <form id="form-container">
+      <form className="form-container">
         <label htmlFor="card-name">
           Nome da Carta:
           <input
